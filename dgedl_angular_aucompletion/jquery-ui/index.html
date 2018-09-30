@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr" data-ng-app="app">
+<head>
+    <title>DGEDL AngularJS Aucomplétion</title>
+    
+    <!-- css -->
+    <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
+</head>
+<body>
+    
+	<div data-ng-controller="CardController">
+		
+		<!-- zone de saisie déclenchant l'autocomplétion -->
+		<input type="text" placeholder="Recherche de cartes ..."
+			data-card-autocomplete 
+			data-append-to=".autocomplete-container" 
+			data-ng-model="card" />
+		
+		{{card}}
+		
+		<!-- conteneur de la liste de choix de cartes -->
+        <div class="autocomplete-container"></div>
+		
+	</div>
+	
+	<!-- js -->
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+	<script src="./angular/application.js"></script>
+	<script src="./angular/controllers.js"></script>
+	<script src="./angular/directives.js"></script>
+
+</body>
+</html>
