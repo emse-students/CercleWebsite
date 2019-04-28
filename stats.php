@@ -57,11 +57,15 @@ if (!isset($_GET["id"])) {
                         <div class="selector">
                             <h1>Classement général</h1>
                             <div class="L_center">
+                                <div class="item_formulaire">Recherche :</div>
+                                <input type="texte" ng-model="stats_globales.globale.search">
+                            </div>
+                            <div class="L_center">
                                 <div style="margin-right: 5px">Classé par :</div>
-                                <input type="radio" name="globale_classby" value="depense" ng-model="stats_globales.globale.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Dépenses</div>
-                                <input type="radio" name="globale_classby" value="volume" ng-model="stats_globales.globale.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Volume</div>
-                                <input type="radio" name="globale_classby" value="alcool" ng-model="stats_globales.globale.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Volume d'alcool</div>
-                                <input type="radio" name="globale_classby" value="perm" ng-model="stats_globales.globale.classby" style="margin-bottom: auto"><div>Nb de perm</div>
+                                <input type="radio" name="globale_classby" value="-depense" ng-model="stats_globales.globale.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Dépenses</div>
+                                <input type="radio" name="globale_classby" value="-volume" ng-model="stats_globales.globale.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Volume</div>
+                                <input type="radio" name="globale_classby" value="-alcool" ng-model="stats_globales.globale.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Volume d'alcool</div>
+                                <input type="radio" name="globale_classby" value="-perm" ng-model="stats_globales.globale.classby" style="margin-bottom: auto"><div>Nb de perm</div>
                             </div>
                         </div>
                         <div class="centreur">
@@ -76,8 +80,8 @@ if (!isset($_GET["id"])) {
                                     <div class="head_tableau_stats">Volume d'alcool</div>
                                     <div class="head_tableau_stats">Nb de Perm</div>
                                 </div>
-                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.globale.classby=='depense'" ng-repeat="user in stats_globales.globale.data.depense | limitTo : stats_globales.globale.limit">
-                                    <div class="case_tableau" style="width: 50%;">{{classement(user.classement)}}</div>
+                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.globale.data" ng-repeat="user in stats_globales.globale.data | orderBy : stats_globales.globale.classby | filter : stats_globales.globale.search |  limitTo : stats_globales.globale.limit">
+                                    <div class="case_tableau" style="width: 50%;">{{classement(user.rank, stats_globales.globale.classby)}}</div>
                                     <div class="case_tableau" style="width: 120%;">{{user.prenom}}</div>
                                     <div class="case_tableau" style="width: 120%;">{{user.nom}}</div>
                                     <div class="case_tableau">{{user.promo}}</div>
@@ -86,40 +90,10 @@ if (!isset($_GET["id"])) {
                                     <div class="case_tableau">{{volume(user.alcool)}}</div>
                                     <div class="case_tableau">{{user.perm}}</div>
                                 </div>
-                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.globale.classby=='volume'" ng-repeat="user in stats_globales.globale.data.volume | limitTo : stats_globales.globale.limit">
-                                    <div class="case_tableau" style="width: 50%;">{{classement(user.classement)}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.prenom}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.nom}}</div>
-                                    <div class="case_tableau">{{user.promo}}</div>
-                                    <div class="case_tableau">{{prix(user.depense)}}</div>
-                                    <div class="case_tableau">{{volume(user.volume)}}</div>
-                                    <div class="case_tableau">{{volume(user.alcool)}}</div>
-                                    <div class="case_tableau">{{user.perm}}</div>
-                                </div>
-                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.globale.classby=='alcool'" ng-repeat="user in stats_globales.globale.data.alcool | limitTo : stats_globales.globale.limit">
-                                    <div class="case_tableau" style="width: 50%;">{{classement(user.classement)}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.prenom}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.nom}}</div>
-                                    <div class="case_tableau">{{user.promo}}</div>
-                                    <div class="case_tableau">{{prix(user.depense)}}</div>
-                                    <div class="case_tableau">{{volume(user.volume)}}</div>
-                                    <div class="case_tableau">{{volume(user.alcool)}}</div>
-                                    <div class="case_tableau">{{user.perm}}</div>
-                                </div>
-                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.globale.classby=='perm'" ng-repeat="user in stats_globales.globale.data.perm | limitTo : stats_globales.globale.limit">
-                                    <div class="case_tableau" style="width: 50%;">{{classement(user.classement)}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.prenom}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.nom}}</div>
-                                    <div class="case_tableau">{{user.promo}}</div>
-                                    <div class="case_tableau">{{prix(user.depense)}}</div>
-                                    <div class="case_tableau">{{volume(user.volume)}}</div>
-                                    <div class="case_tableau">{{volume(user.alcool)}}</div>
-                                    <div class="case_tableau">{{user.perm}}</div>
-                                </div>
-                                <div class="bouton" ng-if="stats_globales.globale.limit==5" ng-click="stats_globales.globale.limit=20" style="margin-top: 10px;">Top 20</div>
-                                <div class="bouton" ng-if="stats_globales.globale.limit==20" ng-click="stats_globales.globale.limit=5" style="margin-top: 10px;">Hide</div>
-                                <h2 style="margin-top: 10px;">Répartition du nombre de boissons totales par type de boisson :</h2>
-                                <nvd3 options="options_diagramme_biere" data="stats_globales.globale.data_diagramme_biere"></nvd3>
+                                <div class="bouton" ng-if="stats_globales.globale.limit==10" ng-click="stats_globales.globale.limit=50" style="margin-top: 10px;">Top 50</div>
+                                <div class="bouton" ng-if="stats_globales.globale.limit==50" ng-click="stats_globales.globale.limit=10" style="margin-top: 10px;">Top 10</div>
+                                <h2 style="margin-top: 10px;" ng-if="stats_globales.globale.data_diagramme_biere">Répartition du nombre de boissons totales par type de boisson :</h2>
+                                <nvd3 options="options_diagramme_biere" data="stats_globales.globale.data_diagramme_biere" ng-if="stats_globales.globale.data_diagramme_biere"></nvd3>
                             </div>
                         </div>
                     </div>
@@ -132,14 +106,18 @@ if (!isset($_GET["id"])) {
                         <div class="selector">
                             <h1>Par année</h1>
                             <div class="L_center">
+                                <div class="item_formulaire">Recherche :</div>
+                                <input type="texte" ng-model="stats_globales.annee.search">
+                            </div>
+                            <div class="L_center">
                                 <div style="margin-right: 5px">Année :
                                     <select ng-model="stats_globales.annee.annee" ng-options="annee.id*1 as annee.name for annee in stats_globales.annee.list"></select>
                                 </div>
                                 <div style="margin-right: 5px">Classé par :</div>
-                                <input type="radio" name="annee_classby" value="depense" ng-model="stats_globales.annee.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Dépenses</div>
-                                <input type="radio" name="annee_classby" value="volume" ng-model="stats_globales.annee.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Volume</div>
-                                <input type="radio" name="annee_classby" value="alcool" ng-model="stats_globales.annee.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Volume d'alcool</div>
-                                <input type="radio" name="annee_classby" value="perm" ng-model="stats_globales.annee.classby" style="margin-bottom: auto"><div>Nb de perm</div>
+                                <input type="radio" name="annee_classby" value="-depense" ng-model="stats_globales.C.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Dépenses</div>
+                                <input type="radio" name="annee_classby" value="-volume" ng-model="stats_globales.annee.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Volume</div>
+                                <input type="radio" name="annee_classby" value="-alcool" ng-model="stats_globales.annee.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Volume d'alcool</div>
+                                <input type="radio" name="annee_classby" value="-perm" ng-model="stats_globales.annee.classby" style="margin-bottom: auto"><div>Nb de perm</div>
                             </div>
                         </div>
                         <div class="centreur">
@@ -154,8 +132,8 @@ if (!isset($_GET["id"])) {
                                     <div class="head_tableau_stats">Volume d'alcool</div>
                                     <div class="head_tableau_stats">Nb de Perm</div>
                                 </div>
-                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.annee.classby=='depense'" ng-repeat="user in stats_globales.annee.data[stats_globales.annee.annee].depense | limitTo : stats_globales.annee.limit">
-                                    <div class="case_tableau" style="width: 50%;">{{classement(user.classement)}}</div>
+                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.globale.data" ng-repeat="user in stats_globales.annee.data[stats_globales.annee.annee] | orderBy : stats_globales.annee.classby | filter : stats_globales.annee.search |  limitTo : stats_globales.annee.limit">
+                                    <div class="case_tableau" style="width: 50%;">{{classement(user.rank, stats_globales.annee.classby)}}</div>
                                     <div class="case_tableau" style="width: 120%;">{{user.prenom}}</div>
                                     <div class="case_tableau" style="width: 120%;">{{user.nom}}</div>
                                     <div class="case_tableau">{{user.promo}}</div>
@@ -164,40 +142,10 @@ if (!isset($_GET["id"])) {
                                     <div class="case_tableau">{{volume(user.alcool)}}</div>
                                     <div class="case_tableau">{{user.perm}}</div>
                                 </div>
-                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.annee.classby=='volume'" ng-repeat="user in stats_globales.annee.data[stats_globales.annee.annee].volume | limitTo : stats_globales.annee.limit">
-                                    <div class="case_tableau" style="width: 50%;">{{classement(user.classement)}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.prenom}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.nom}}</div>
-                                    <div class="case_tableau">{{user.promo}}</div>
-                                    <div class="case_tableau">{{prix(user.depense)}}</div>
-                                    <div class="case_tableau">{{volume(user.volume)}}</div>
-                                    <div class="case_tableau">{{volume(user.alcool)}}</div>
-                                    <div class="case_tableau">{{user.perm}}</div>
-                                </div>
-                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.annee.classby=='alcool'" ng-repeat="user in stats_globales.annee.data[stats_globales.annee.annee].alcool | limitTo : stats_globales.annee.limit">
-                                    <div class="case_tableau" style="width: 50%;">{{classement(user.classement)}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.prenom}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.nom}}</div>
-                                    <div class="case_tableau">{{user.promo}}</div>
-                                    <div class="case_tableau">{{prix(user.depense)}}</div>
-                                    <div class="case_tableau">{{volume(user.volume)}}</div>
-                                    <div class="case_tableau">{{volume(user.alcool)}}</div>
-                                    <div class="case_tableau">{{user.perm}}</div>
-                                </div>
-                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.annee.classby=='perm'" ng-repeat="user in stats_globales.annee.data[stats_globales.annee.annee].perm | limitTo : stats_globales.annee.limit">
-                                    <div class="case_tableau" style="width: 50%;">{{classement(user.classement)}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.prenom}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.nom}}</div>
-                                    <div class="case_tableau">{{user.promo}}</div>
-                                    <div class="case_tableau">{{prix(user.depense)}}</div>
-                                    <div class="case_tableau">{{volume(user.volume)}}</div>
-                                    <div class="case_tableau">{{volume(user.alcool)}}</div>
-                                    <div class="case_tableau">{{user.perm}}</div>
-                                </div>
-                                <div class="bouton" ng-if="stats_globales.annee.limit==5" ng-click="stats_globales.annee.limit=20" style="margin-top: 10px;">Top 20</div>
-                                <div class="bouton" ng-if="stats_globales.annee.limit==20" ng-click="stats_globales.annee.limit=5" style="margin-top: 10px;">Hide</div>
-                                <h2 style="margin-top: 10px;">Répartition du nombre de boissons sur l'année {{stats_globales.annee.annee}}/{{stats_globales.annee.annee+1}} par type de boisson :</h2>
-                                <nvd3 options="options_diagramme_biere" data="stats_globales.annee.data[stats_globales.annee.annee].diagramme_biere"></nvd3>
+                                <div class="bouton" ng-if="stats_globales.annee.limit==10" ng-click="stats_globales.annee.limit=50" style="margin-top: 10px;">Top 50</div>
+                                <div class="bouton" ng-if="stats_globales.annee.limit==50" ng-click="stats_globales.annee.limit=10" style="margin-top: 10px;">Top 10</div>
+                                <h2 style="margin-top: 10px;" ng-if="stats_globales.annee.data_diagramme_biere">Répartition du nombre de boissons sur l'année {{stats_globales.annee.annee}}/{{stats_globales.annee.annee+1}} par type de boisson :</h2>
+                                <nvd3 options="options_diagramme_biere" data="stats_globales.annee.data_diagramme_biere[stats_globales.annee.annee]"></nvd3>
                             </div>
                         </div>
                     </div>
@@ -205,14 +153,18 @@ if (!isset($_GET["id"])) {
                         <div class="selector">
                             <h1>Par promo</h1>
                             <div class="L_center">
+                                <div class="item_formulaire">Recherche :</div>
+                                <input type="texte" ng-model="stats_globales.promo.search">
+                            </div>
+                            <div class="L_center">
                                 <div style="margin-right: 5px">Promo :
                                     <select ng-model="stats_globales.promo.promo" ng-options="promo*1 for promo in stats_globales.promo.list"></select>
                                 </div>
                                 <div style="margin-right: 5px">Classé par :</div>
-                                <input type="radio" name="promo_classby" value="depense" ng-model="stats_globales.promo.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Dépenses</div>
-                                <input type="radio" name="promo_classby" value="volume" ng-model="stats_globales.promo.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Volume</div>
-                                <input type="radio" name="promo_classby" value="alcool" ng-model="stats_globales.promo.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Volume d'alcool</div>
-                                <input type="radio" name="promo_classby" value="perm" ng-model="stats_globales.promo.classby" style="margin-bottom: auto"><div>Nb de perm</div>
+                                <input type="radio" name="promo_classby" value="-depense" ng-model="stats_globales.promo.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Dépenses</div>
+                                <input type="radio" name="promo_classby" value="-volume" ng-model="stats_globales.promo.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Volume</div>
+                                <input type="radio" name="promo_classby" value="-alcool" ng-model="stats_globales.promo.classby" style="margin-bottom: auto"><div style="margin-right: 5px">Volume d'alcool</div>
+                                <input type="radio" name="promo_classby" value="-perm" ng-model="stats_globales.promo.classby" style="margin-bottom: auto"><div>Nb de perm</div>
                             </div>
                         </div>
                         <div class="centreur">
@@ -227,8 +179,8 @@ if (!isset($_GET["id"])) {
                                     <div class="head_tableau_stats">Volume d'alcool</div>
                                     <div class="head_tableau_stats">Nb de Perm</div>
                                 </div>
-                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.promo.classby=='depense'" ng-repeat="user in stats_globales.promo.data[stats_globales.promo.promo].depense | limitTo : stats_globales.promo.limit">
-                                    <div class="case_tableau" style="width: 50%;">{{classement(user.classement)}}</div>
+                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.globale.data" ng-repeat="user in stats_globales.promo.data[stats_globales.promo.promo] | orderBy : stats_globales.promo.classby | filter : stats_globales.promo.search |  limitTo : stats_globales.promo.limit">
+                                    <div class="case_tableau" style="width: 50%;">{{classement(user.rank, stats_globales.promo.classby)}}</div>
                                     <div class="case_tableau" style="width: 120%;">{{user.prenom}}</div>
                                     <div class="case_tableau" style="width: 120%;">{{user.nom}}</div>
                                     <div class="case_tableau">{{user.promo}}</div>
@@ -237,46 +189,16 @@ if (!isset($_GET["id"])) {
                                     <div class="case_tableau">{{volume(user.alcool)}}</div>
                                     <div class="case_tableau">{{user.perm}}</div>
                                 </div>
-                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.promo.classby=='volume'" ng-repeat="user in stats_globales.promo.data[stats_globales.promo.promo].volume | limitTo : stats_globales.promo.limit">
-                                    <div class="case_tableau" style="width: 50%;">{{classement(user.classement)}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.prenom}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.nom}}</div>
-                                    <div class="case_tableau">{{user.promo}}</div>
-                                    <div class="case_tableau">{{prix(user.depense)}}</div>
-                                    <div class="case_tableau">{{volume(user.volume)}}</div>
-                                    <div class="case_tableau">{{volume(user.alcool)}}</div>
-                                    <div class="case_tableau">{{user.perm}}</div>
-                                </div>
-                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.promo.classby=='alcool'" ng-repeat="user in stats_globales.promo.data[stats_globales.promo.promo].alcool | limitTo : stats_globales.promo.limit">
-                                    <div class="case_tableau" style="width: 50%;">{{classement(user.classement)}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.prenom}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.nom}}</div>
-                                    <div class="case_tableau">{{user.promo}}</div>
-                                    <div class="case_tableau">{{prix(user.depense)}}</div>
-                                    <div class="case_tableau">{{volume(user.volume)}}</div>
-                                    <div class="case_tableau">{{volume(user.alcool)}}</div>
-                                    <div class="case_tableau">{{user.perm}}</div>
-                                </div>
-                                <div class="L_tableau" ng-class="color($index)" ng-if="stats_globales.promo.classby=='perm'" ng-repeat="user in stats_globales.promo.data[stats_globales.promo.promo].perm | limitTo : stats_globales.promo.limit">
-                                    <div class="case_tableau" style="width: 50%;">{{classement(user.classement)}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.prenom}}</div>
-                                    <div class="case_tableau" style="width: 120%;">{{user.nom}}</div>
-                                    <div class="case_tableau">{{user.promo}}</div>
-                                    <div class="case_tableau">{{prix(user.depense)}}</div>
-                                    <div class="case_tableau">{{volume(user.volume)}}</div>
-                                    <div class="case_tableau">{{volume(user.alcool)}}</div>
-                                    <div class="case_tableau">{{user.perm}}</div>
-                                </div>
-                                <div class="bouton" ng-if="stats_globales.promo.limit==5" ng-click="stats_globales.promo.limit=20" style="margin-top: 10px;">Top 20</div>
-                                <div class="bouton" ng-if="stats_globales.promo.limit==20" ng-click="stats_globales.promo.limit=5" style="margin-top: 10px;">Hide</div>
-                                <h2 style="margin-top: 10px;">Répartition du nombre de boissons totales de la promo {{stats_globales.promo.promo}} par type de boisson :</h2>
-                                <nvd3 options="options_diagramme_biere" data="stats_globales.promo.data[stats_globales.promo.promo].diagramme_biere"></nvd3>
+                                <div class="bouton" ng-if="stats_globales.promo.limit==10" ng-click="stats_globales.promo.limit=50" style="margin-top: 10px;">Top 50</div>
+                                <div class="bouton" ng-if="stats_globales.promo.limit==50" ng-click="stats_globales.promo.limit=10" style="margin-top: 10px;">Top 10</div>
+                                <h2 style="margin-top: 10px;" ng-if="stats_globales.promo.data_diagramme_biere">Répartition du nombre de boissons pour la promo {{stats_globales.promo.promo}} par type de boisson :</h2>
+                                <nvd3 options="options_diagramme_biere" data="stats_globales.promo.data_diagramme_biere[stats_globales.promo.promo]"></nvd3>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="accordion" ng-class="stats_perso.class" ng-click="stats_perso.activate(); start_stats_perso()">
+                <div class="accordion" ng-class="stats_perso.class" ng-click="stats_perso.activate(); start_stats();">
                     <div style="height: 20px; width: 20px;" ng-if="stats_perso.screen">
                         <img style="width :100%;" src="images/accordion_activate.png">
                     </div>
@@ -317,20 +239,21 @@ if (!isset($_GET["id"])) {
                                 </div>
                                 <div class="L_tableau" ng-class="color(2)">
                                     <div class="case_tableau" style="width: 200%">Classements généraux</div>
-                                    <div class="case_tableau">{{classement(stats_perso.globale.rang_depense_g)}}</div>
-                                    <div class="case_tableau">{{classement(stats_perso.globale.rang_volume_g)}}</div>
-                                    <div class="case_tableau">{{classement(stats_perso.globale.rang_alcool_g)}}</div>
-                                    <div class="case_tableau">{{classement(stats_perso.globale.rang_perm_g)}}</div>
+                                    <div class="case_tableau">{{classement(stats_perso.globale.rank.depense)}}</div>
+                                    <div class="case_tableau">{{classement(stats_perso.globale.rank.volume)}}</div>
+                                    <div class="case_tableau">{{classement(stats_perso.globale.rank.alcool)}}</div>
+                                    <div class="case_tableau">{{classement(stats_perso.globale.rank.perm)}}</div>
                                 </div>
                                 <div class="L_tableau" ng-class="color(1)">
-                                    <div class="case_tableau" style="width: 200%">Classements par rapport à la promo {{stats_perso.globale.data.promo}}</div>
-                                    <div class="case_tableau">{{classement(stats_perso.globale.rang_depense_p)}}</div>
-                                    <div class="case_tableau">{{classement(stats_perso.globale.rang_volume_p)}}</div>
-                                    <div class="case_tableau">{{classement(stats_perso.globale.rang_alcool_p)}}</div>
-                                    <div class="case_tableau">{{classement(stats_perso.globale.rang_perm_p)}}</div>
+                                    <div class="case_tableau" style="width: 200%">Classements par rapport à la promo {{stats_perso.promo.promo}}</div>
+                                    <div class="case_tableau">{{classement(stats_perso.promo.rank.depense)}}</div>
+                                    <div class="case_tableau">{{classement(stats_perso.promo.rank.volume)}}</div>
+                                    <div class="case_tableau">{{classement(stats_perso.promo.rank.alcool)}}</div>
+                                    <div class="case_tableau">{{classement(stats_perso.promo.rank.perm)}}</div>
                                 </div>
-                                <h2 style="margin-top: 10px;">Répartition du nombre de boissons totales de {{stats_perso.globale.data.prenom}} {{stats_perso.globale.data.nom}} par type de boisson :</h2>
-                                <nvd3 options="options_diagramme_biere" data="stats_perso.globale.diagramme_biere"></nvd3>
+                                <h2 style="margin-top: 10px;" ng-if="stats_perso.globale_biere">Nombre total de boissons consomées par {{stats_perso.globale.data.prenom}} {{stats_perso.globale.data.nom}} : {{total_boisson(stats_perso.globale_biere)}}</h2>
+                                <h2 style="margin-top: 10px;" ng-if="stats_perso.globale_biere">réparties par types :</h2>
+                                <nvd3 options="options_diagramme_biere" data="stats_perso.globale_biere" ng-if="stats_perso.globale_biere"></nvd3>
                             </div>
                         </div>
                     </div>
@@ -361,13 +284,14 @@ if (!isset($_GET["id"])) {
                                 </div>
                                 <div class="L_tableau" ng-class="color(2)">
                                     <div class="case_tableau" style="width: 150%">Classements</div>
-                                    <div class="case_tableau">{{classement(stats_perso.annee.data[stats_perso.annee.annee].rang_depense)}}</div>
-                                    <div class="case_tableau">{{classement(stats_perso.annee.data[stats_perso.annee.annee].rang_volume)}}</div>
-                                    <div class="case_tableau">{{classement(stats_perso.annee.data[stats_perso.annee.annee].rang_alcool)}}</div>
-                                    <div class="case_tableau">{{classement(stats_perso.annee.data[stats_perso.annee.annee].rang_perm)}}</div>
+                                    <div class="case_tableau">{{classement(stats_perso.annee.rank[stats_perso.annee.annee].depense)}}</div>
+                                    <div class="case_tableau">{{classement(stats_perso.annee.rank[stats_perso.annee.annee].volume)}}</div>
+                                    <div class="case_tableau">{{classement(stats_perso.annee.rank[stats_perso.annee.annee].alcool)}}</div>
+                                    <div class="case_tableau">{{classement(stats_perso.annee.rank[stats_perso.annee.annee].perm)}}</div>
                                 </div>
-                                <h2 style="margin-top: 10px;">Répartition du nombre de boissons de {{stats_perso.globale.data.prenom}} {{stats_perso.globale.data.nom}} sur l'année {{stats_perso.annee.annee}}/{{stats_perso.annee.annee+1}} par type de boisson :</h2>
-                                <nvd3 options="options_diagramme_biere" data="stats_perso.annee.data[stats_perso.annee.annee].diagramme_biere"></nvd3>
+                                <h2 style="margin-top: 10px;" ng-if="stats_perso.annee.biere && stats_perso.annee.biere[stats_perso.annee.annee]">Nombre de boissons consommées par {{stats_perso.globale.data.prenom}} {{stats_perso.globale.data.nom}} sur l'année {{stats_perso.annee.annee}}/{{stats_perso.annee.annee+1}} : {{total_boisson(stats_perso.annee.biere[stats_perso.annee.annee])}}</h2>
+                                <h2 style="margin-top: 10px;" ng-if="stats_perso.annee.biere && stats_perso.annee.biere[stats_perso.annee.annee]">réparties par types :</h2>
+                                <nvd3 options="options_diagramme_biere" data="stats_perso.annee.biere[stats_perso.annee.annee]" ng-if="stats_perso.annee.biere && stats_perso.annee.biere[stats_perso.annee.annee]"></nvd3>
                             </div>
                         </div>
                     </div>

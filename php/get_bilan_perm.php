@@ -4,7 +4,7 @@ include ("connexion.php");
 
 
 
-$req = $bdd -> prepare("SELECT SUM(o.nb), SUM(o.prix), o.id_B_C, cu.id as id_cu, cu.nom, ct.id as id_ct, ct.nom as contenant, ct.capacite, ct.type FROM operation_cercle o, boisson b, contenu cu, contenant ct WHERE o.id_perm=? AND o.B_C_A='B' AND o.id_B_C=b.id AND b.id_contenu=cu.id AND b.id_contenant=ct.id GROUP BY o.id_B_C  ");
+$req = $bdd -> prepare("SELECT SUM(o.nb), SUM(o.prix), o.id_B_C, cu.id as id_cu, cu.nom, ct.id as id_ct, ct.nom as contenant, ct.capacite, ct.type FROM transaction o, boisson b, contenu cu, contenant ct WHERE o.id_perm=? AND o.B_C_A='B' AND o.id_B_C=b.id AND b.id_contenu=cu.id AND b.id_contenant=ct.id GROUP BY o.id_B_C  ");
 $req -> execute(array($_GET["id"]));
 $i=0;
 while ($donnees = $req->fetch())
@@ -26,7 +26,7 @@ while ($donnees = $req->fetch())
 		$i++;
 }
 
-$req = $bdd -> prepare("SELECT SUM(o.nb), SUM(o.prix), o.id_B_C, cu.id as id_cu, cu.nom, ct.id as id_ct, ct.nom as contenant, ct.capacite, ct.type FROM operation_cercle o, boisson b, contenu cu, contenant ct WHERE o.id_perm=? AND o.B_C_A='F' AND o.id_B_C=b.id AND b.id_contenu=cu.id AND b.id_contenant=ct.id GROUP BY o.id_B_C  ");
+$req = $bdd -> prepare("SELECT SUM(o.nb), SUM(o.prix), o.id_B_C, cu.id as id_cu, cu.nom, ct.id as id_ct, ct.nom as contenant, ct.capacite, ct.type FROM transaction o, boisson b, contenu cu, contenant ct WHERE o.id_perm=? AND o.B_C_A='F' AND o.id_B_C=b.id AND b.id_contenu=cu.id AND b.id_contenant=ct.id GROUP BY o.id_B_C  ");
 $req -> execute(array($_GET["id"]));
 while ($donnees = $req->fetch())
 {
@@ -47,7 +47,7 @@ while ($donnees = $req->fetch())
 		$i++;
 }
 
-$req = $bdd -> prepare("SELECT SUM(o.nb), SUM(o.prix), o.id_B_C, c.nom FROM operation_cercle o, consommable c WHERE o.id_perm=? AND o.B_C_A='C' AND o.id_B_C=c.id GROUP BY o.id_B_C  ");
+$req = $bdd -> prepare("SELECT SUM(o.nb), SUM(o.prix), o.id_B_C, c.nom FROM transaction o, consommable c WHERE o.id_perm=? AND o.B_C_A='C' AND o.id_B_C=c.id GROUP BY o.id_B_C  ");
 $req -> execute(array($_GET["id"]));
 
 while ($donnees = $req->fetch())

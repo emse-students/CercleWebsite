@@ -149,7 +149,7 @@ if (!isset($_GET["id"])) {
                         <div class="head_tableau clickable" ng-click="compte.order('achat.nom')">Produit</div>
                         <div class="head_tableau clickable" ng-click="compte.order('prix')" style="width: 50%;">Prix</div>
                          <?php
-                            if ($_GET["id"]==0 and $_SESSION["droit_cercle"]=="cercle") {
+                            if ($_GET["id"]==0 and $_SESSION["droit"]=="cercle") {
                                 echo "<div class=\"head_tableau\" style=\"width: 75%;\"></div>";
                             }
                         ?>
@@ -168,7 +168,7 @@ if (!isset($_GET["id"])) {
                         <div class="case_tableau">{{operation.achat.nom}}</div>
                         <div class="case_tableau" style="width: 50%;">{{prix(operation.prix)}}</div>
                         <?php
-                            if ($_GET["id"]==0 and $_SESSION["droit_cercle"]=="cercle") {
+                            if ($_GET["id"]==0 and $_SESSION["droit"]=="cercle") {
                                 echo "<div class=\"case_tableau\" style=\"width: 75%;\"><div class='bouton' style='padding: 5px;' ng-click='annule(operation)'>Annuler</div></div>";
                             }
                         ?>

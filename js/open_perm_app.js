@@ -11,7 +11,7 @@ app.controller('mainController', function($scope) {
     $scope.layer3=false;
 
 
-	if(droit_cercle=="cercle"){
+	if(droit=="cercle"){
 		$scope.droit=true;
 	}else{
 		$scope.droit=false;

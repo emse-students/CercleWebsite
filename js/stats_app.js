@@ -132,32 +132,145 @@ app.controller('mainController', function($scope) {
         }
     };
 
-    $scope.start_stats_globales=function (){
+    function compute_rank(data, id = null) {
+        const ranked_data = data.slice(0);
+        const personalRank = {};
+        data.sort((user1,user2) => user2.depense - user1.depense);
+        lastValue = null;
+        lastRank = 1;
+        for (let i = 0; i < data.length; i++) {
+            ranked_data.find((user) => user.id === data[i].id).rank = {};
+            if (data[i].depense === lastValue) {
+                ranked_data.find((user) => user.id === data[i].id).rank.depense = lastRank;
+            } else {
+                ranked_data.find((user) => user.id === data[i].id).rank.depense = i+1;
+                lastValue = data[i].depense;
+                lastRank = i+1;
+            }
+            if (id && id === data[i].id){
+                personalRank.depense = lastRank;
+            }
+
+        }
+        data.sort((user1,user2) => user2.volume - user1.volume);
+        lastValue = null;
+        lastRank = 1;
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].volume === lastValue) {
+                ranked_data.find((user) => user.id === data[i].id).rank.volume = lastRank;
+            } else {
+                ranked_data.find((user) => user.id === data[i].id).rank.volume = i+1;
+                lastValue = data[i].volume;
+                lastRank = i+1;
+            }
+            if (id && id === data[i].id){
+                personalRank.volume = lastRank;
+            }
+
+
+        }
+        data.sort((user1,user2) => user2.alcool - user1.alcool);
+        lastValue = null;
+        lastRank = 1;
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].alcool === lastValue) {
+                ranked_data.find((user) => user.id === data[i].id).rank.alcool = lastRank;
+            } else {
+                ranked_data.find((user) => user.id === data[i].id).rank.alcool = i+1;
+                lastValue = data[i].alcool;
+                lastRank = i+1;
+            }
+            if (id && id === data[i].id){
+                personalRank.alcool = lastRank;
+            }
+
+
+        }
+        data.sort((user1,user2) => user2.perm - user1.perm);
+        lastValue = null;
+        lastRank = 1;
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].perm === lastValue) {
+                ranked_data.find((user) => user.id === data[i].id).rank.perm = lastRank;
+            } else {
+                ranked_data.find((user) => user.id === data[i].id).rank.perm = i+1;
+                lastValue = data[i].perm;
+                lastRank = i+1;
+            }
+            if (id && id === data[i].id){
+                personalRank.perm = lastRank;
+            }
+
+
+        }
+        if (id) {
+            return {ranked_data, personalRank};
+        } else {
+            return ranked_data;
+        }
+
+    }
+
+    $scope.start_stats=function (){
         if (!$scope.stats_globales.started) {
+            $scope.stats_globales.started=true;
             $scope.stats_globales.globale = {};
-            $scope.stats_globales.annee = {};
             $scope.stats_globales.promo = {};
-            $scope.stats_globales.globale.limit = 5;
-            $scope.stats_globales.globale.classby = "depense";
-            $scope.stats_globales.annee.limit = 5;
-            $scope.stats_globales.annee.classby = "depense";
-            $scope.stats_globales.promo.limit = 5;
-            $scope.stats_globales.promo.classby = "depense";
+            $scope.stats_globales.annee = {};
+            $scope.stats_globales.globale.limit = 10;
+            $scope.stats_globales.globale.classby = "-depense";
+            $scope.stats_globales.annee.limit = 10;
+            $scope.stats_globales.annee.classby = "-depense";
+            $scope.stats_globales.promo.limit = 10;
+            $scope.stats_globales.promo.classby = "-depense";
 
             var answer;
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
                     answer = angular.fromJson(this.responseText);
-                    $scope.stats_globales.globale.data = answer.globale.data;
-                    $scope.stats_globales.globale.data_diagramme_biere = answer.globale.diagramme_biere;
+                    // Globale
+                    const {ranked_data, personalRank} = compute_rank(answer.globale, id_search);
+                    $scope.stats_perso.globale = {};
+                    $scope.stats_perso.globale.rank = personalRank;
+                    $scope.stats_globales.globale.data = ranked_data;
+
+                    //Annee
                     $scope.stats_globales.annee.data = answer.annee.data;
                     $scope.stats_globales.annee.list = answer.annee.list;
+                    $scope.stats_perso.annee = {};
+                    $scope.stats_perso.annee.rank = {};
+                    $scope.stats_perso.annee.list = [];
+                    for (let i = 0; i < answer.annee.list.length; i++) {
+                        const {ranked_data, personalRank} = compute_rank(answer.annee.data[answer.annee.list[i].id], id_search);
+                        $scope.stats_globales.annee.data[answer.annee.list[i].id] = ranked_data;
+                        if(Object.entries(personalRank).length !== 0){
+                            $scope.stats_perso.annee.rank[answer.annee.list[i].id] = personalRank;
+                            $scope.stats_perso.annee.list.push(answer.annee.list[i]);
+                            $scope.stats_perso.annee.annee = answer.annee.list[i].id;
+                        }
+                    }
                     $scope.stats_globales.annee.annee = answer.annee.list[answer.annee.list.length-1].id;
-                    $scope.stats_globales.promo.data = answer.promo.data;
-                    $scope.stats_globales.promo.list = answer.promo.list;
-                    $scope.stats_globales.promo.promo = answer.promo.list[answer.promo.list.length-1];
-                    $scope.stats_globales.started=true;
+
+                    //Promo
+                    answer.promo = answer.promo.sort();
+                    $scope.stats_globales.promo.data = {};
+                    $scope.stats_perso.promo = {};
+                    for (let i = 0; i < answer.promo.length; i++) {
+                        const {ranked_data, personalRank} = compute_rank(answer.globale.filter((user) => user.promo === answer.promo[i]), id_search);
+                        $scope.stats_globales.promo.data[answer.promo[i]] = ranked_data;
+                        if (Object.entries(personalRank).length !== 0) {
+                            $scope.stats_perso.promo.rank = personalRank;
+                            $scope.stats_perso.promo.promo = answer.promo[i];
+                        }
+                    }
+                    $scope.stats_globales.promo.list = answer.promo;
+                    $scope.stats_globales.promo.promo = answer.promo[answer.promo.length-1];
+
+                    console.log($scope.stats_perso);
+                    //Apply
+                    start_stats_perso();
+                    start_diagramms();
                     $scope.$apply();
                 }
             };
@@ -168,26 +281,55 @@ app.controller('mainController', function($scope) {
     };
 
 
+    start_diagramms=function (){
 
-    $scope.start_stats_perso=function (){
+        var answer;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                answer = angular.fromJson(this.responseText);
+                $scope.stats_globales.globale.data_diagramme_biere = answer.globale;
+                $scope.stats_globales.annee.data_diagramme_biere = answer.annee.data;
+                $scope.stats_globales.promo.data_diagramme_biere = answer.promo.data;
+                $scope.$apply();
+            }
+        };
+        xhttp.open("GET", "php/get_stats_biere.php");
+        xhttp.send();
+
+    };
+
+
+
+    start_stats_perso=function (){
         if (!$scope.stats_perso.started) {
-            $scope.stats_perso.globale = {};
-            $scope.stats_perso.annee = {};
             var answer;
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
                     answer = angular.fromJson(this.responseText);
-                    $scope.stats_perso.globale = answer.globale;
-                    $scope.stats_perso.annee = answer.annee;
-                    $scope.stats_perso.annee.annee = answer.annee.list[answer.annee.list.length - 1].id;
+                    $scope.stats_perso.globale_biere = answer.globale;
+                    $scope.stats_perso.annee.biere = answer.annee;
                     $scope.stats_perso.started = true;
                     $scope.$apply();
                 }
             };
             xhttp.open("GET", "php/get_stats_perso.php?id="+id_search);
             xhttp.send();
+            $scope.stats_perso.globale.data = $scope.stats_globales.globale.data.find((user) => user.id === id_search);
+            $scope.stats_perso.annee.data = {};
+            for (let i = 0; i < $scope.stats_perso.annee.list.length; i++) {
+                $scope.stats_perso.annee.data[$scope.stats_perso.annee.list[i].id] = $scope.stats_globales.annee.data[$scope.stats_perso.annee.list[i].id].find((user) => user.id === id_search);
+            }
         }
+    };
+
+    $scope.total_boisson = function (array) {
+        total = 0
+        for (let i = 0; i < array.length; i++) {
+            total+= parseInt(array[i].y);
+        }
+        return total;
     };
 
     $scope.color=function(index)
@@ -283,7 +425,15 @@ app.controller('mainController', function($scope) {
         return ent+","+dec+"L";
     };
 
-    $scope.classement=function (int) {
+    $scope.classement=function (rank, classBy = null) {
+        let int;
+        if (classBy) {
+            classBy = classBy.replace(/\-/g, '');
+            int = rank[classBy];
+        } else {
+            int = rank;
+        }
+
         if (int===1){
             return "1er";
         }else{
@@ -316,10 +466,9 @@ app.controller('mainController', function($scope) {
     if(perso){
         $scope.stats_globales= new stats_item();
         $scope.stats_perso= new stats_item(true);
-        $scope.start_stats_perso();
     }else{
         $scope.stats_globales= new stats_item(true);
         $scope.stats_perso= new stats_item();
-        $scope.start_stats_globales();
     }
+    $scope.start_stats();
 });

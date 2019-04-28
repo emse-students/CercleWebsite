@@ -3,7 +3,7 @@ session_start();
 include ("connexion.php");
 
 
-$req = $bdd -> prepare("UPDATE user SET droit_cercle=? WHERE id_user=?");
+$req = $bdd -> prepare("UPDATE user SET droit=? WHERE id_user=?");
 
 $req -> execute(array($_POST["droit"],$_POST["id"]));
 

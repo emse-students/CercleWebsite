@@ -34,12 +34,12 @@ function prix ($float)
 	}
 }
 
-if (isset($_SESSION["id_cercle"]) AND $_SESSION["droit_cercle"]!="aucun")
+if (isset($_SESSION["id_cercle"]) AND $_SESSION["droit"]!="aucun")
 {
 
 
 
-	if ($_SESSION["droit_cercle"]=="user") {
+	if ($_SESSION["droit"]=="user") {
 		$_GET["id"]=$_SESSION["id_cercle"];
 	}
 	if (!isset($_GET["nb"])) {
@@ -58,7 +58,7 @@ if (isset($_SESSION["id_cercle"]) AND $_SESSION["droit_cercle"]!="aucun")
 		//echo "id=".$_GET["id"]."<br>";
 		//echo "date_debut=".$_GET["date_debut"]."<br>";
 		//echo "date_fin=".$_GET["date_fin"]."<br>";
-		$req = $bdd -> prepare("SELECT o.id, o.id_debiteur, o.B_C_A, o.id_B_C, o.datee as odatee, o.nb, o.prix, o.id_perm, o.id_user, p.datee as pdatee, np.nom as npnom, u.login_user, u.prenom, u.nom as unom, u.promo_user FROM operation_cercle o, perm p, nom_perm np, user u WHERE ( np.id=p.id_nom_perm AND p.id=o.id_perm AND o.id_user=u.id_user AND o.B_C_A='A') ORDER BY o.datee DESC LIMIT ?");
+		$req = $bdd -> prepare("SELECT o.id, o.id_debiteur, o.B_C_A, o.id_B_C, o.datee as odatee, o.nb, o.prix, o.id_perm, o.id_user, p.datee as pdatee, np.nom as npnom, u.login, u.prenom, u.nom as unom, u.promo FROM transaction o, perm p, nom_perm np, user u WHERE ( np.id=p.id_nom_perm AND p.id=o.id_perm AND o.id_user=u.id_user AND o.B_C_A='A') ORDER BY o.datee DESC LIMIT ?");
 
 		$req -> execute(array($_GET["nb"]));
 		$i=0;
@@ -74,15 +74,15 @@ if (isset($_SESSION["id_cercle"]) AND $_SESSION["droit_cercle"]!="aucun")
 				$operations[$i]["debiteur"]["easy_search"]="inconnu";
 				$operations[$i]["debiteur"]["promo"]="inconnu";
 			}else{
-				$rep = $bdd -> prepare("SELECT login_user, prenom, nom, promo_user FROM user WHERE id_user=?");
+				$rep = $bdd -> prepare("SELECT login, prenom, nom, promo FROM user WHERE id_user=?");
 				$rep -> execute(array($donnees["id_debiteur"]));
 				$donnees3 = $rep->fetch();
 				$operations[$i]["debiteur"]["id"]=$donnees["id_debiteur"];
-				$operations[$i]["debiteur"]["login"]=$donnees3["login_user"];
+				$operations[$i]["debiteur"]["login"]=$donnees3["login"];
 				$operations[$i]["debiteur"]["prenom"]=$donnees3["prenom"];
 				$operations[$i]["debiteur"]["nom"]=$donnees3["nom"];
 				$operations[$i]["debiteur"]["easy_search"]=$donnees3["prenom"]." ".$donnees3["nom"];
-				$operations[$i]["debiteur"]["promo"]=$donnees3["promo_user"];
+				$operations[$i]["debiteur"]["promo"]=$donnees3["promo"];
 			}
 
 			$operations[$i]["type"]=$donnees["B_C_A"];
@@ -91,15 +91,15 @@ if (isset($_SESSION["id_cercle"]) AND $_SESSION["droit_cercle"]!="aucun")
 			$operations[$i]["prix"]=$donnees["prix"];
 
 			$operations[$i]["user"]["id"]=$donnees["id_user"];
-			$operations[$i]["user"]["login"]=$donnees["login_user"];
+			$operations[$i]["user"]["login"]=$donnees["login"];
 			if ($donnees["unom"]==""){
-				$donnees["unom"]=explode(".",$donnees["login_user"])[1];
-				$donnees["prenom"]=explode(".",$donnees["login_user"])[0];
+				$donnees["unom"]=explode(".",$donnees["login"])[1];
+				$donnees["prenom"]=explode(".",$donnees["login"])[0];
 			}
 			$operations[$i]["user"]["prenom"]=$donnees["prenom"];
 			$operations[$i]["user"]["nom"]=$donnees["unom"];
 			$operations[$i]["user"]["easy_search"]=$donnees["prenom"]." ".$donnees["unom"];
-			$operations[$i]["user"]["promo"]=$donnees["promo_user"];
+			$operations[$i]["user"]["promo"]=$donnees["promo"];
 
 			$operations[$i]["perm"]["id"]=$donnees["id_perm"];
 			$operations[$i]["perm"]["nom"]=$donnees["npnom"];

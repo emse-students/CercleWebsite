@@ -21,7 +21,7 @@ if (!isset($donnees["id"])) {
 }
 
 
-$req = $bdd -> prepare("UPDATE operation_cercle SET B_C_A='C', id_B_C=? WHERE B_C_A='B' and id_B_C=?");
+$req = $bdd -> prepare("UPDATE transaction SET B_C_A='C', id_B_C=? WHERE B_C_A='B' and id_B_C=?");
 
 $req -> execute(array($donnees["id"],$_GET["old_id"]));	
 

@@ -2,6 +2,13 @@
 include_once ("./env/env.php");
 include_once ("../env/env.php");
 
+if ($_ENV['env_name'] == "dev") {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+}
+
+
 try
 {
     $bdd = new PDO('mysql:host='.$_ENV["bdd"]["host"].';dbname='.$_ENV["bdd"]["bdd_name"].';charset=utf8', $_ENV['bdd']['login'], $_ENV['bdd']['pwd'], array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
@@ -38,25 +45,17 @@ if ($_ENV['CAS']) {
 // Connexion a la BDD via l'id du CAS
 if (!isset($_SESSION["id_cercle"]))
 {
-	$req = $bdd -> prepare("SELECT id_user, droit_cercle FROM user WHERE login_user=?");
+	$req = $bdd -> prepare("SELECT id_user, droit FROM user WHERE login=?");
 	$req -> execute(array($_SESSION['phpCAS']['user']));
 	$donnees = $req -> fetch();
     
     
-	if(isset($donnees["id_user"]) AND $donnees["droit_cercle"]!="aucun")
+	if(isset($donnees["id_user"]) AND $donnees["droit"]!="aucun")
 	{
-		
-		$rep = $bdd->prepare('UPDATE user SET prenom=:prenom, nom=:nom WHERE id_user=:ID');
-        $rep->execute(array(
-            'ID' => $donnees["id_user"],
-            'prenom' => $_SESSION['phpCAS']['attributes']["givenName"],
-            'nom' => $_SESSION['phpCAS']['attributes']["sn"]
-            ));
-
-		$_SESSION["id_cercle"]=$donnees["id_user"];
+	    $_SESSION["id_cercle"]=$donnees["id_user"];
 		$_SESSION["prenom"]=$_SESSION['phpCAS']['attributes']["givenName"];
 		$_SESSION["nom"]=$_SESSION['phpCAS']['attributes']["sn"];
-		$_SESSION["droit_cercle"]=$donnees["droit_cercle"];
+		$_SESSION["droit"]=$donnees["droit"];
 		
 		
 	}else{

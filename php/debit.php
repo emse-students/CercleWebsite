@@ -10,7 +10,7 @@ $data=$str_json->data;
 foreach ($data as $value)
 {
 	if ($value->type=="B") {
-		$req = $bdd->prepare('INSERT INTO operation_cercle VALUES (null,?,?,?,"B",?,?,?,?)');
+		$req = $bdd->prepare('INSERT INTO transaction VALUES (null,?,?,?,"B",?,?,?,?)');
         $req->execute(array($str_json->id_user,
 					$_SESSION["id_cercle"],
         	$str_json->id_perm,
@@ -22,7 +22,7 @@ foreach ($data as $value)
         $req = $bdd->prepare('UPDATE perm set total_litre=total_litre+? where id=?');
         $req->execute(array($value->litre,$str_json->id_perm));
 	}elseif ($value->type=="C") {
-		$req = $bdd->prepare('INSERT INTO operation_cercle VALUES (null,?,?,?,"C",?,?,?,?)');
+		$req = $bdd->prepare('INSERT INTO transaction VALUES (null,?,?,?,"C",?,?,?,?)');
         $req->execute(array($str_json->id_user,
 					$_SESSION["id_cercle"],
         	$str_json->id_perm,
@@ -49,7 +49,7 @@ foreach ($data as $value)
 	        $id=$donnees["id"];
 
         }
-        $req = $bdd->prepare('INSERT INTO operation_cercle VALUES (null,?,?,?,"C",?,?,?,?)');
+        $req = $bdd->prepare('INSERT INTO transaction VALUES (null,?,?,?,"C",?,?,?,?)');
         $req->execute(array($str_json->id_user,
 					$_SESSION["id_cercle"],
         	$str_json->id_perm,
@@ -59,7 +59,7 @@ foreach ($data as $value)
         	-$value->prix
         	));
 	}elseif ($value->type=="F") {
-		$req = $bdd->prepare('INSERT INTO operation_cercle VALUES (null,?,?,?,"F",?,?,?,?)');
+		$req = $bdd->prepare('INSERT INTO transaction VALUES (null,?,?,?,"F",?,?,?,?)');
         $req->execute(array($str_json->id_user,
 					$_SESSION["id_cercle"],
         	$str_json->id_perm,
@@ -72,7 +72,7 @@ foreach ($data as $value)
         $req->execute(array($value->litre,$str_json->id_perm));
 	}
 	if ($value->nb>0) {
-		$req = $bdd->prepare('UPDATE user set solde_cercle=solde_cercle-? where id_user=?');
+		$req = $bdd->prepare('UPDATE user set solde=solde-? where id_user=?');
     $req->execute(array($value->prix,$str_json->id_user));
 
     $req = $bdd->prepare('UPDATE perm set total_vente=total_vente+? where id=?');

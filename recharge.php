@@ -103,7 +103,7 @@ include ("php/connexion.php");
                         <div class="head_tableau clickable" ng-click="compte.order('debiteur.easy_search')" style="width: 125%;">Rechargé par</div>
                         <div class="head_tableau clickable" ng-click="compte.order('prix')" style="width: 50%;">Montant</div>
                         <?php
-                        if ($_SESSION["droit_cercle"]=="cercle") {
+                        if ($_SESSION["droit"]=="cercle") {
                             echo "<div class=\"head_tableau\" style=\"width: 75%;\"></div>";
                         }
                         ?>
@@ -115,7 +115,7 @@ include ("php/connexion.php");
                         <a href='compte.php?id={{operation.debiteur.id}}' style="width: 125%;"><div class="case_tableau" >{{operation.debiteur.prenom}} {{operation.debiteur.nom}}</div></a>
                         <div class="case_tableau" style="width: 50%;">{{prix(operation.prix)}}</div>
                         <?php
-                        if ($_SESSION["droit_cercle"]=="cercle") {
+                        if ($_SESSION["droit"]=="cercle") {
                             echo "<div class=\"case_tableau\" style=\"width: 75%;\"><div class='bouton' style='padding: 5px;' ng-click='annule(operation)'>Annuler</div></div>";
                         }
                         ?>

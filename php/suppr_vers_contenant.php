@@ -25,7 +25,7 @@ if(!isset($new_id['id']))
 	$new_id=$req->fetch();
 }
 
-$req = $bdd -> prepare("UPDATE operation_cercle SET id_B_C=? WHERE B_C_A='B' and id_B_C=?");
+$req = $bdd -> prepare("UPDATE transaction SET id_B_C=? WHERE B_C_A='B' and id_B_C=?");
 
 $req -> execute(array($new_id['id'],$old_id['id']));
 

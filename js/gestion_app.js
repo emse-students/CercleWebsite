@@ -74,7 +74,7 @@ app.controller('mainController', function($scope) {
 		            answer = angular.fromJson(this.responseText);
 
 
-		            $scope.contenus_list = answer.contenus;
+		            $scope.contenus_list = answer.users;
 		            $scope.contenants_list = answer.contenants;
 
 		            $scope.$apply();
@@ -83,6 +83,34 @@ app.controller('mainController', function($scope) {
 
 		    xhttp.open("GET", "php/get_contenu.php", true);
 		    xhttp.send();
+		}
+
+	};
+
+	$scope.get_all_users=function(){
+		if ($scope.contenus_list==null) {
+			var answer;
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+
+					answer = angular.fromJson(this.responseText);
+
+
+					$scope.all_users = answer.users;
+					$scope.new_user.user=null;
+					$scope.new_user.search=null;
+					$scope.new_user.auto_c=false;
+					$scope.new_user.comfirme_hard_user=false;
+					$scope.new_user.hard_user= null;
+					$scope.new_user.montant= 0;
+
+					$scope.$apply();
+				}
+			};
+
+			xhttp.open("GET", "php/get_all_users.php", true);
+			xhttp.send();
 		}
 
 	};
@@ -98,11 +126,6 @@ app.controller('mainController', function($scope) {
 
 
 		            $scope.constantes_list = answer;
-		            $scope.new_user.montant=0;
-		            $scope.new_user.mail=null;
-		            var currentTime = new Date();
-		            $scope.new_user.promo=currentTime.getFullYear();
-		            $scope.new_user.type="ICM";
 		            $scope.$apply();
 		        }
 		    };
@@ -338,7 +361,7 @@ app.controller('mainController', function($scope) {
 
 	$scope.valid_new_user=function()
 	{
-		var montant = $scope.new_user.montant;
+		var montant = $scope.new_user.montant?$scope.new_user.montant : 0;
 		var cotis= $scope.constantes_list[1].valeur;
 		var solde = $scope.new_user.montant - $scope.constantes_list[1].valeur;
 		var continu=true;
@@ -348,7 +371,6 @@ app.controller('mainController', function($scope) {
 		}
 		if (continu)
 		{
-			/^(\S+)@etu\.emse\.fr$/.exec($scope.new_user.mail)
 			var login = RegExp.$1
 			var answer;
 			var xhttp = new XMLHttpRequest();
@@ -362,6 +384,7 @@ app.controller('mainController', function($scope) {
 						$scope.message.texte="Compte créé avec succès";
 						$scope.new_user.montant=0;
 		            	$scope.new_user.mail=null;
+						$scope.new_user.user=null;
 		            	$scope.$apply();
 		            	window.location.replace("gestion.php#message");
 
@@ -378,8 +401,21 @@ app.controller('mainController', function($scope) {
 		    };
 		    xhttp.open("POST", "php/new_user.php", true);
 		    xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		    xhttp.send("login="+login+"&montant="+montant+"&cotis="+cotis+"&promo="+$scope.new_user.promo+"&type="+$scope.new_user.type);
+			if ($scope.new_user.user) {
+				xhttp.send("id_user="+$scope.new_user.user.id+"&montant="+montant+"&cotis="+cotis);
+			} else {
+				xhttp.send("nom="+$scope.new_user.hard_user.nom+"&prenom="+$scope.new_user.hard_user.prenom+"&montant="+montant+"&cotis="+cotis+"&promo="+$scope.new_user.hard_user.promo);
+			}
+
 		}
+	};
+
+	$scope.create_hard_user=function()
+	{
+		$scope.new_user.hard_user = {};
+		$scope.new_user.hard_user.nom = '';
+		$scope.new_user.hard_user.prenom = '';
+		$scope.new_user.hard_user.promo = 0;
 	};
 
 	$scope.valid_new_perm=function(){

@@ -400,7 +400,7 @@ include ("php/connexion.php");
                         </div>
                     </div>
 
-                    <div class="accordion" ng-class="new_user.class" ng-click="new_user.activate(); start_constante();">
+                    <div class="accordion" ng-class="new_user.class" ng-click="new_user.activate(); start_constante(); get_all_users();">
                         <div style="height: 20px; width: 20px;" ng-if="new_user.screen">
                             <img style="width :100%;" src="images/accordion_activate.png">
                         </div>
@@ -409,46 +409,80 @@ include ("php/connexion.php");
                         </div>
                         <div style="margin-left: 10px">Nouveau compte</div>
                     </div>
-                    <div ng-if="new_user.screen" class="screen" >
+                    <div ng-if="new_user.screen" class="screen">
                         <div class="L_left">
-                            <div class="item_formulaire" style="margin-left: 1em; ">Adresse mail EMSE :</div>
-                            <input type="text" placeholder="prenom.nom@etu.emse.fr" ng-model="new_user.mail" style="font-size: 1em; min-width: 15em;" ng-click="message.statu='none';"/>
-                            <span ng-if="!control_mail(new_user.mail) && new_user.mail!=null" style="width: 30px; margin-left: 0.5em; margin-right: 0.5em" >
-                                <img style="width: 100%;" src="images/false.png">
-                            </span>
-                            <span class="info" ng-if="!control_mail(new_user.mail) && new_user.mail!=null" style="font-size: 0.8em; color: red margin: auto;">
-                                Entrez une adresse mail EMSE valide
-                            </span>
-                            <span ng-if="control_mail(new_user.mail)" style="width: 30px; margin-left: 0.5em"><img style="width: 100%;" src="images/correct.png"></span>
-                            <span ng-if="new_user.mail==null" style="width: 30px; margin-left: 0.5em"><div style="height: 34px;"></div></span>
+                            <div class="item_formulaire" style="margin-left: 1em; ">Nouveau cotisant :</div>
+                            <!-- zone de saisie déclenchant l'autocomplétion -->
+                            <div ng-if="new_user.user==null && !new_user.hard_user">
+                                <input type="text" placeholder="Tapez le nom de l'utilisateur" ng-model="new_user.search" style="font-size: 1.5em; width: 13em;" autocomplete="off" ng-click="new_user.auto_c=true; new_user.user=null;"/>
+
+                                <div class="auto_c" ng-if="new_user.auto_c && new_user.search!=null">
+                                    <div class="auto_c_value" ng-repeat="item in all_users | filter : new_user.search" ng-click="new_user.user=item; new_user.auto_c=false;">{{item.prenom}} {{item.nom}} {{item.type}} {{item.promo}}</div>
+                                </div>
+                            </div>
+                            <div class="L_left" ng-if="new_user.user==null && !new_user.hard_user">
+                                <span ng-if="new_user.search!=null" style="width: 30px; margin: 0.5em" >
+                                    <img style="width: 100%;" src="images/false.png">
+                                </span>
+                            </div>
+
+                            <div class="div" ng-if="!new_user.hard_user">
+                                <div class="L_left" ng-if="new_user.user!=null">
+                                    <span  style="font-size: 1.8em;">{{new_user.user.prenom}} {{new_user.user.nom}} </span><span  style="font-size: 1.2em; margin-left: 10px;"> {{new_user.user.type}}  {{new_user.user.promo}}</span>
+                                </div>
+                            </div>
+                            <div class="bouton" ng-click="new_user.user = null; new_user.search = null" style="margin-left: 5%;" ng-if="new_user.user!=null && !new_user.hard_user">Annuler</div>
                         </div>
-                        <div class="L_left" style="margin-top: 0.8em">
-                            <div class="item_formulaire" style="margin-left: 1em; ">Type :</div>
-                            <select name="select_type"  ng-model="new_user.type" style="font-size: 1em; min-width: 15.3em; margin-left: 9.25em;">
-                              <option value="ICM">ICM</option>
-                              <option value="ISTP">ISTP</option>
-                              <option value="autre">Autre</option>
-                            </select>
+                        <div class="L_center" style="margin-top: 0.8em" ng-if="new_user.user && new_user.user.droit !== 'aucun'">
+                            <div class="item_formulaire">Cet utilisateur est déjà cotisant cercle : {{new_user.user.droit}}</div>
                         </div>
-                        <div class="L_left" style="margin-top: 0.8em">
+                        <div class="L_left" style="margin-top: 0.8em" ng-if="new_user.hard_user">
+                            <div class="item_formulaire" style="margin-left: 1em; ">Prénom :</div>
+                            <!-- zone de saisie déclenchant l'autocomplétion -->
+
+                            <input type="text" ng-model="new_user.hard_user.prenom" style="font-size: 1em; min-width: 15em; margin-left: 0.6em;"/>
+                        </div>
+                        <div class="L_left" style="margin-top: 0.8em" ng-if="new_user.hard_user">
+                            <div class="item_formulaire" style="margin-left: 1em; ">Nom :</div>
+                            <!-- zone de saisie déclenchant l'autocomplétion -->
+
+                            <input type="text" ng-model="new_user.hard_user.nom" style="font-size: 1em; min-width: 15em; margin-left: 0.6em;"/>
+                        </div>
+                        <div class="L_left" style="margin-top: 0.8em" ng-if="new_user.hard_user">
                             <div class="item_formulaire" style="margin-left: 1em; ">Promo :</div>
-                            <input type="number" ng-model="new_user.promo" style="font-size: 1em; min-width: 15em; margin-left: 8.1em;"/>
+                            <!-- zone de saisie déclenchant l'autocomplétion -->
+
+                            <input type="number" ng-model="new_user.hard_user.promo" style="font-size: 1em; min-width: 15em; margin-left: 0.6em;"/>
                         </div>
-                        <div class="L_left" style="margin-top: 0.8em">
+                        <div class="L_left" style="margin-top: 0.8em" ng-if="!new_user.user || new_user.user.droit === 'aucun'">
                             <div class="item_formulaire" style="margin-left: 1em; ">Premier versement :</div>
                             <!-- zone de saisie déclenchant l'autocomplétion -->
 
                             <input type="number" ng-model="new_user.montant" style="font-size: 1em; min-width: 15em; margin-left: 0.6em;"/>
                         </div>
-                        <div class="L_left" style="margin-top: 0.8em">
+                        <div class="L_left" style="margin-top: 0.8em" ng-if="!new_user.user || new_user.user.droit === 'aucun'">
                             <div class="item_formulaire" style="margin-left: 1em; ">Cotisation : {{prix(constantes_list[1].valeur)}}</div>
                         </div>
-                        <div class="L_left" style="margin-top: 0.8em">
+                        <div class="L_left" style="margin-top: 0.8em" ng-if="!new_user.user || new_user.user.droit === 'aucun'">
                             <div class="item_formulaire" style="margin-left: 1em; ">Solde : {{prix(new_user.montant-constantes_list[1].valeur)}}</div>
                         </div>
-                        <div class="L_center" style="margin-top: 0.8em">
-                            <div class="bouton" ng-if="control_mail(new_user.mail)" ng-click="valid_new_user()">Créer</div>
-                            <div style="height: 3em;" ng-if="!control_mail(new_user.mail)" ></div>
+                        <div class="L_center" style="margin-top: 0.8em" ng-if="!new_user.user || new_user.user.droit === 'aucun'">
+                            <div class="bouton" ng-if="new_user.user || new_user.hard_user" ng-click="valid_new_user()">Faire cotiser</div>
+                            <div style="height: 3em;" ng-if="!new_user.user" ></div>
+                        </div>
+                        <div class="L_center" style="margin-top: 0.8em" >
+                            <div class="bouton" ng-if="!new_user.user && !new_user.comfirme_hard_user && !new_user.hard_user" ng-click="new_user.comfirme_hard_user = true;">Nouveau compte cercle hors élèves</div>
+                            <div style="height: 3em;" ng-if="new_user.user" ></div>
+                        </div>
+                        <div class="L_left">
+                            <p  style="margin-left: 1em; font-size: 1em; " ng-if="new_user.comfirme_hard_user">
+                                Attention le compte que vous vous apprétez à créer ne sera pas relié à un compte EMSE, l'utilisateur n'y aura donc pas accès.<br>
+                                En revanche il sera bien possible pour les membres du staff d'accéder à l'historique de ce compte, de le débiter en perm et de le recherger.
+                            </p>
+                        </div>
+                        <div class="L_center" style="margin-top: 0.8em" ng-if="new_user.comfirme_hard_user">
+                            <div class="bouton" style="margin: 10px;" ng-click="new_user.comfirme_hard_user = false;">Annuler</div>
+                            <div class="bouton" style="margin: 10px;" ng-click="new_user.comfirme_hard_user = false; create_hard_user();">Ok</div>
                         </div>
                     </div>
                 </div>

@@ -2,7 +2,7 @@
 session_start();
 include ("connexion.php");
 
-$req = $bdd -> prepare("SELECT id_user, id_perm, prix, B_C_A, id_B_C, nb FROM operation_cercle Where id=?");
+$req = $bdd -> prepare("SELECT id_user, id_perm, prix, B_C_A, id_B_C, nb FROM transaction Where id=?");
 
 $req -> execute(array($_POST["id"]));
 
@@ -28,13 +28,13 @@ if ($donnees["id_perm"]!=0) {
 
 
 
-$req = $bdd -> prepare("UPDATE user SET solde_cercle=solde_cercle-? WHERE id_user=?");
+$req = $bdd -> prepare("UPDATE user SET solde=solde-? WHERE id_user=?");
 
 $req -> execute(array($donnees["prix"],$donnees['id_user']));
 
 
 
-$req = $bdd -> prepare("DELETE FROM operation_cercle Where id=?");
+$req = $bdd -> prepare("DELETE FROM transaction Where id=?");
 
 $req -> execute(array($_POST["id"]));
 

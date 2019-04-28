@@ -44,7 +44,7 @@ if (isset($_POST["contenant"])) {
 			$req -> execute(array($_POST["id"],$_POST["contenant"]));
 		}
 	}else{
-		$req = $bdd -> prepare("SELECT id FROM operation_cercle WHERE B_C_A='B' and id_B_C=?");
+		$req = $bdd -> prepare("SELECT id FROM transaction WHERE B_C_A='B' and id_B_C=?");
 
 		$req -> execute(array($donnees["id"]));
 

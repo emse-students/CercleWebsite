@@ -105,7 +105,7 @@ while ($donnees = $req->fetch())
                             <input type="text" placeholder="Tapez le nom du client" ng-model="client.search" style="font-size: 1.5em; width: 13em;" autocomplete="off" ng-click="client.auto_c=true; perm.client=null;"/>
 
                             <div class="auto_c" ng-if="client.auto_c && client.search!=null">
-                                <div class="auto_c_value" ng-repeat="item in users | filter : client.search" ng-click="perm.client=item; client.auto_c=false; maj();">{{item.prenom}} {{item.nom}}</div>
+                                <div class="auto_c_value" ng-repeat="item in users | filter : client.search" ng-click="perm.client=item; client.auto_c=false; maj();">{{item.prenom}} {{item.nom}} {{item.type}} {{item.promo}}</div>
                             </div>
                         </div>
                         <div class="L_left" ng-if="perm.client==null">
@@ -136,7 +136,7 @@ while ($donnees = $req->fetch())
                             </div>
 
                             <div class="L_left" ng-if="perm.client!=null">
-                                <span  style="font-size: 1.8em;">{{perm.client.prenom}} {{perm.client.nom}} </span><span  style="font-size: 1.2em; margin-left: 10px;"> promo {{perm.client.promo}}</span>
+                                <span  style="font-size: 1.8em;">{{perm.client.prenom}} {{perm.client.nom}} </span><span  style="font-size: 1.2em; margin-left: 10px;"> {{perm.client.type}} {{perm.client.promo}}</span>
                             </div>
                             <div class="L_space_a" ng-if="perm.client!=null">
                                 <span>Solde : {{prix(perm.client.solde)}}</span> <span>Total achat : {{prix(perm.client.total)}} ({{arrondi(perm.client.total_litre)}}L)</span>

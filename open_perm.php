@@ -379,7 +379,7 @@ while ($donnees = $req->fetch())
         <script src="js/ng-FitText.js" type="text/javascript"></script>
         <?php
 
-        echo "<script type=\"text/javascript\">var droit_cercle='".$_SESSION['droit_cercle']."'</script>";
+        echo "<script type=\"text/javascript\">var droit='".$_SESSION['droit']."'</script>";
         if ($forum) {
           echo "<script type=\"text/javascript\">var forum=true;</script>";
         }else{
