@@ -40,6 +40,14 @@ app.controller('mainController', function($scope) {
 
 
                 $scope.text = answer;
+                $scope.users.user=null;
+                $scope.users.search=null;
+                $scope.users.auto_c=false;
+
+                $scope.users.user2=null;
+                $scope.users.search2=null;
+                $scope.users.auto_c2=false;
+
 
                 $scope.$apply();
             }
