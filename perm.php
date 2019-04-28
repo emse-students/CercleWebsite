@@ -39,7 +39,7 @@ while ($donnees = $req->fetch())
     	<div class="page">
             <h1>{{perm.nom}}</h1>
             <div class="L_space_b">
-                <div class="info" style="display: flex; margin-top: 10px; align-items: center;">Total des ventes : {{arrondi(perm.total_litre)}}L soit {{prix(perm.total_vente)}}</div>
+                <div class="info" style="display: flex; margin-top: 10px; align-items: center;">Total des ventes : {{prix(perm.total_vente)}}</div>
                 <div class="bouton" ng-click="crack_boursier()" ng-if="forum==1">
                     Krach Boursier
                 </div>
