@@ -133,7 +133,7 @@ app.controller('mainController', function($scope) {
     };
 
     function compute_rank(data, id = null) {
-        const ranked_data = data.slice(0);
+        const ranked_data = JSON.parse(JSON.stringify(data));
         const personalRank = {};
         data.sort((user1,user2) => user2.depense - user1.depense);
         lastValue = null;
