@@ -223,6 +223,7 @@ app.controller('mainController', function($scope) {
             $scope.stats_globales.annee.classby = "-depense";
             $scope.stats_globales.promo.limit = 10;
             $scope.stats_globales.promo.classby = "-depense";
+            $scope.loading = true;
 
             var answer;
             var xhttp = new XMLHttpRequest();
@@ -271,6 +272,7 @@ app.controller('mainController', function($scope) {
                     //Apply
                     start_stats_perso();
                     start_diagramms();
+                    $scope.loading = false;
                     $scope.$apply();
                 }
             };

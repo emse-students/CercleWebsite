@@ -44,7 +44,7 @@ if (!isset($_GET["id"])) {
                     </div>
                     <div style="margin-left: 10px">Stats globales</div>
                 </div>
-                <div ng-if="stats_globales.screen && !stats_globales.started" class="inventaire" >
+                <div ng-if="stats_globales.screen && loading" class="inventaire" >
                     <div class="classement">
                         <h1>Chargement en cours ...</h1>
                         <h2>Calcul des classements</h2>
@@ -52,7 +52,7 @@ if (!isset($_GET["id"])) {
 
                     </div>
                 </div>
-                <div ng-if="stats_globales.screen && stats_globales.started" class="inventaire" >
+                <div ng-if="stats_globales.screen && !loading" class="inventaire" >
                     <div class="classement">
                         <div class="selector">
                             <h1>Classement général</h1>
@@ -207,7 +207,7 @@ if (!isset($_GET["id"])) {
                     </div>
                     <div style="margin-left: 10px">Stats perso</div>
                 </div>
-                <div ng-if="stats_perso.screen && !stats_perso.started" class="inventaire" >
+                <div ng-if="stats_perso.screen && loading" class="inventaire" >
                     <div class="classement">
                         <h1>Chargement en cours ...</h1>
                         <h2>Calcul des classements</h2>
@@ -215,7 +215,7 @@ if (!isset($_GET["id"])) {
 
                     </div>
                 </div>
-                <div ng-if="stats_perso.screen && stats_perso.started" class="inventaire">
+                <div ng-if="stats_perso.screen && !loading" class="inventaire">
                     <div class="classement">
                         <div class="selector">
                             <h1>Consomation totale de</h1>
