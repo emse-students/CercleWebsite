@@ -11,7 +11,6 @@ $_ENV['env_name'] = "dev";
 $_ENV['bdd'] = [];
 //host is most of the time localhost
 $_ENV['bdd']['host'] = 'localhost';
-//Ordi Coco
 $_ENV['bdd']['bdd_name'] = 'bdd_name';
 $_ENV['bdd']['login'] = 'login';
 $_ENV['bdd']['pwd'] = 'password';
