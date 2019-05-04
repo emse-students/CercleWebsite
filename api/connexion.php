@@ -17,6 +17,22 @@ try
     die('Erreur : ' . $e->getMessage());
 }
 
-if (!isset($_SERVER['HTTP_LOGIN']) or !isset($_SERVER['HTTP_PWD']) or $_ENV["api"]["login"] != $_SERVER['HTTP_LOGIN'] or $_ENV["api"]["pwd"] != $_SERVER['HTTP_PWD']) {
+if (
+    $_ENV['api']['secure'] and
+    (
+        !isset($_SERVER['HTTP_LOGIN']) or
+        !isset($_SERVER['HTTP_PWD']) or
+        $_ENV["api"]["login"] != $_SERVER['HTTP_LOGIN'] or
+        $_ENV["api"]["pwd"] != $_SERVER['HTTP_PWD']
+    )
+) {
+    http_response_code(401);
     exit('Unauthorized !');
 }
+
+function error_handler($errno, $errstr) {
+    http_response_code(500);
+    exit();
+}
+
+set_error_handler("error_handler");
