@@ -74,7 +74,7 @@ app.controller('mainController', function($scope) {
 		            answer = angular.fromJson(this.responseText);
 
 
-		            $scope.contenus_list = answer.users;
+		            $scope.contenus_list = answer.contenus;
 		            $scope.contenants_list = answer.contenants;
 
 		            $scope.$apply();

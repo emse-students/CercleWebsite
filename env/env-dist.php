@@ -1,5 +1,10 @@
 <?php
 /**
+COPY IT AS env.php
+and edit it with your credentials
+*/
+
+/**
  * Created by PhpStorm.
  * User: douec
  * Date: 09/12/2018
