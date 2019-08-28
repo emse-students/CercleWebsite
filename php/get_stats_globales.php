@@ -68,16 +68,16 @@ if (isset($_SESSION["id_cercle"]) AND $_SESSION["droit"]!="aucun")
 	$k=0;
 
    	$year_max = intval(date('Y'));
-   	$a = strtotime($year_max."-08-20");
+   	$a = strtotime($year_max."-08-01");
    	if (time()>$a){
    		$year_max++;
 	}
 
    	for ($j=2013;$j<$year_max-1;$j++){
             //echo $j."<br>";
-            $time_min=strtotime($j."-08-20");
+            $time_min=strtotime($j."-08-01");
 //            echo "time min :".$time_min."<br>";
-            $time_max=strtotime(($j+1)."-07-10");
+            $time_max=strtotime(($j+1)."-07-31");
 //            echo "time max :".$time_max."<br>";
 
             $req = $bdd -> prepare("SELECT u.id_user, u.login ,u.nom, u.prenom, u.promo, ys.depense, ys.volume, ys.alcool, ys.perm
@@ -155,10 +155,8 @@ JOIN (
                     $annee["data"][$j][$i]["perm"]=$donnees["perm"];
                     $i++;
 
-                    if ($j < ($year_max -1)) {
-                        $request = $bdd -> prepare("INSERT INTO year_stats VALUES (?,?,?,?,?,?)");
-                        $request -> execute(array($donnees["id_user"],$j,$donnees["depense"],$donnees["volume"],$donnees["alcool"],$donnees["perm"]));
-                    }
+                    $request = $bdd -> prepare("INSERT INTO year_stats VALUES (?,?,?,?,?,?)");
+                    $request -> execute(array($donnees["id_user"],$j,$donnees["depense"],$donnees["volume"],$donnees["alcool"],$donnees["perm"]));
                 }
                 if ($i!=0){
                     $annee['list'][$k]["id"]=$j;
@@ -167,9 +165,9 @@ JOIN (
                 }
             }
         }
-    $time_min=strtotime(($year_max-1)."-08-20");
+    $time_min=strtotime(($year_max-1)."-08-01");
 //            echo "time min :".$time_min."<br>";
-    $time_max=strtotime($year_max."-07-10");
+    $time_max=strtotime($year_max."-07-31");
 //            echo "time max :".$time_max."<br>";
 
 
@@ -225,9 +223,6 @@ GROUP BY op.id_user
         $annee["data"][($year_max-1)][$i]["alcool"]=$donnees["alcool"];
         $annee["data"][($year_max-1)][$i]["perm"]=$donnees["perm"];
         $i++;
-
-        $request = $bdd -> prepare("INSERT INTO year_stats VALUES (?,?,?,?,?,?)");
-        $request -> execute(array($donnees["id_user"],($year_max-1),$donnees["depense"],$donnees["volume"],$donnees["alcool"],$donnees["perm"]));
     }
     if ($i!=0){
         $annee['list'][$k]["id"]=($year_max-1);
