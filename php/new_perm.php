@@ -2,6 +2,8 @@
 session_start();
 include ("connexion.php");
 
+include("validation_droits.php");
+
 if (isset($_GET["name"]))
 {
 	$req = $bdd -> prepare("SELECT id FROM nom_perm WHERE nom=?");

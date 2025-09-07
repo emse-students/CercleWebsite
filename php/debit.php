@@ -2,6 +2,8 @@
 session_start();
 include ("connexion.php");
 
+include("validation_droits.php");
+
 $str_json = file_get_contents('php://input');
 $str_json =json_decode($str_json);
 $data=$str_json->data;

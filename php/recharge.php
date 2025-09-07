@@ -2,6 +2,8 @@
 session_start();
 include ("connexion.php");
 
+include("validation_droits.php");
+
 if ($_POST["montant"]>0) {
     $req = $bdd->prepare('INSERT INTO transaction VALUES (null,?,?,2,"A",0,?,1,?)');
     $req->execute(array($_POST["id_user"],

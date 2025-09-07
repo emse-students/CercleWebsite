@@ -2,6 +2,7 @@
 session_start();
 include ("connexion.php");
 
+include("validation_droits.php");
 
 $req = $bdd -> prepare("UPDATE contenant SET nom=?, capacite=?, type=? WHERE id=?");
 

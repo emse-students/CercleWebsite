@@ -2,6 +2,8 @@
 session_start();
 include ("connexion.php");
 
+include("validation_droits.php");
+
 $req = $bdd -> prepare("SELECT id from contenu WHERE nom=?");
 
 $req -> execute(array($_GET["old_nom"]));

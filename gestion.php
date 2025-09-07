@@ -2,6 +2,7 @@
 session_start();
 include ("php/connexion.php");
 
+include("php/validation_droits.php");
 ?>
 
 <!DOCTYPE html>
@@ -228,7 +229,6 @@ include ("php/connexion.php");
                                 <div class="case_tableau" style="width: 50%;" ng-if="user.modif_droit">
                                     <select name="select_type"  ng-model="user.droit" style="width: 100%;">
                                         <option value="user" ng-click="user.modif_droit=false; maj_user_droit(user);">User</option>
-                                        <option value="cercleux" ng-click="user.modif_droit=false; maj_user_droit(user);">Cercleux</option>
                                         <option value="cercle" ng-click="user.modif_droit=false; maj_user_droit(user);">Cercle</option>
                                     </select>
                                     <div class="bouton" style="padding: 2px; font-size: 0.9em;" ng-click="user.modif_droit=false; maj_user_droit(user);">Ok</div>

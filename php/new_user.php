@@ -2,6 +2,8 @@
 session_start();
 include ("connexion.php");
 
+include("validation_droits.php");
+
 if($_SESSION["droit"]=="cercle"){
 	$solde=$_POST["montant"]-$_POST["cotis"];
 

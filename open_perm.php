@@ -1,6 +1,9 @@
 <?php
 session_start();
 include ("php/connexion.php");
+
+include("php/validation_droits.php");
+
 if (isset($_GET["modif"]) and $_GET["modif"]) {
     $modif=true;
 }else{

@@ -2,6 +2,8 @@
 session_start();
 include ("php/connexion.php");
 
+include("php/validation_droits.php");
+
 ?>
 
 <!DOCTYPE html>

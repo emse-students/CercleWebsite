@@ -2,6 +2,8 @@
 session_start();
 include ("connexion.php");
 
+include("validation_droits.php");
+
 
 $req = $bdd -> prepare("UPDATE constante SET valeur=? WHERE id=?");
 

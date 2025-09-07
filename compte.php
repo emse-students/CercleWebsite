@@ -41,7 +41,7 @@ if (!isset($_GET["id"])) {
     	<div class="page">
 
             <?php
-                if ($_GET['id']==0){
+                if ($_GET['id']==0 || $_SESSION["droit"]=="cercle"){
                 ?>
 
 
@@ -139,7 +139,7 @@ if (!isset($_GET["id"])) {
                         <div class="head_tableau clickable" ng-click="compte.order('date')">Date</div>
                         <div class="head_tableau clickable" ng-click="compte.order('perm.nom')">Perm</div>
                         <?php
-                            if ($_GET["id"]==0) {
+                            if ($_GET["id"]==0 || $_SESSION["droit"]=="cercle") {
                                 echo "<div class=\"head_tableau clickable\" ng-click=\"compte.order('user.easy_search')\" style=\"width: 125%;\">Client</div>";
                                 echo "<div class=\"head_tableau clickable\" ng-click=\"compte.order('debiteur.easy_search')\" style=\"width: 125%;\">Débiteur</div>";
                             }
@@ -149,7 +149,7 @@ if (!isset($_GET["id"])) {
                         <div class="head_tableau clickable" ng-click="compte.order('achat.nom')">Produit</div>
                         <div class="head_tableau clickable" ng-click="compte.order('prix')" style="width: 50%;">Prix</div>
                          <?php
-                            if ($_GET["id"]==0 and $_SESSION["droit"]=="cercle") {
+                            if ($_GET["id"]==0 || $_SESSION["droit"]=="cercle") {
                                 echo "<div class=\"head_tableau\" style=\"width: 75%;\"></div>";
                             }
                         ?>
@@ -159,7 +159,7 @@ if (!isset($_GET["id"])) {
                         <div class="case_tableau">{{datestr(operation.date)}}</div>
                         <div class="case_tableau">{{operation.perm.nom}}</div>
                         <?php
-                            if ($_GET["id"]==0) {
+                            if ($_GET["id"]==0 || $_SESSION["droit"]=="cercle") {
                                 echo "<a href='compte.php?id={{operation.user.id}}' style=\"width: 125%;\"><div class=\"case_tableau\" >{{operation.user.prenom}} {{operation.user.nom}}</div></a>";
                                 echo "<a href='compte.php?id={{operation.debiteur.id}}' style=\"width: 125%;\"><div class=\"case_tableau\" >{{operation.debiteur.prenom}} {{operation.debiteur.nom}}</div></a>";
                             }
@@ -168,7 +168,7 @@ if (!isset($_GET["id"])) {
                         <div class="case_tableau">{{operation.achat.nom}}</div>
                         <div class="case_tableau" style="width: 50%;">{{prix(operation.prix)}}</div>
                         <?php
-                            if ($_GET["id"]==0 and $_SESSION["droit"]=="cercle") {
+                            if ($_GET["id"]==0 || $_SESSION["droit"]=="cercle") {
                                 echo "<div class=\"case_tableau\" style=\"width: 75%;\"><div class='bouton' style='padding: 5px;' ng-click='annule(operation)'>Annuler</div></div>";
                             }
                         ?>

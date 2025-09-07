@@ -2,6 +2,8 @@
 session_start();
 include ("connexion.php");
 
+include("validation_droits.php");
+
 if (isset($_POST["nom"]))
 {
 	$req = $bdd -> prepare("SELECT id FROM contenu WHERE nom=?");

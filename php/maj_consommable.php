@@ -2,6 +2,8 @@
 session_start();
 include ("connexion.php");
 
+include("validation_droits.php");
+
 if ($_GET["old_id"]!=$_GET["new_id"]) {
 	$req = $bdd -> prepare("UPDATE transaction SET id_B_C=? WHERE B_C_A='C' and id_B_C=?");
 

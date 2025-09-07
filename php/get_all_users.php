@@ -2,7 +2,7 @@
 session_start();
 include ("connexion.php");
 
-
+include("validation_droits.php");
 
 $req = $bdd -> query("SELECT id_user, login, prenom, nom, promo, type, solde, droit FROM user order by promo desc ");
 $i=0;

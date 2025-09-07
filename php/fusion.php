@@ -2,6 +2,8 @@
 session_start();
 include ("connexion.php");
 
+include("validation_droits.php");
+
 if($_SESSION["droit"]=="cercle"){
 
 	$req = $bdd -> prepare("SELECT login, nom, prenom, promo, type FROM user WHERE id_user=?");

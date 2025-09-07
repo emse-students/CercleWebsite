@@ -2,6 +2,8 @@
 session_start();
 include ("connexion.php");
 
+include("validation_droits.php");
+
 
 $req = $bdd -> prepare("SELECT id FROM boisson WHERE id_contenu=? and id_contenant=?");
 
